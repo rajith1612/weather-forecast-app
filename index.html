@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="app-shell">
+
+  <!-- Title -->
+  <div class="app-title">Weather App</div>
+
+  <!-- Search bar -->
+  <form method="POST" id="location-form" class="search-bar">
+    <input
+      type="text"
+      name="location"
+      placeholder="Search for a city..."
+      required
+    >
+    <button type="submit">Search</button>
+  </form>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flash-messages">
+        {% for category, msg in messages %}
+          <li class="{{ category }}">{{ msg }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Main weather card -->
+  <section class="main-card">
+    {% if weather %}
+      <div class="main-top">
+        <div class="city-block">
+          <div class="city-name">{{ weather.name }}</div>
+          <div class="city-desc">{{ weather.weather[0].description|title }}</div>
+        </div>
+        <div class="temp-block">
+          <div class="temp-value">
+            {{ weather.main.temp|round(0) }}°
+          </div>
+          <div class="temp-feels">
+            Feels like {{ weather.main.feels_like|round(0) }}°
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="metrics-row">
+        <div class="metric">
+          <div class="metric-label">Wind</div>
+          <div class="metric-value">{{ weather.wind.speed }} m/s</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Humidity</div>
+          <div class="metric-value">{{ weather.main.humidity }}%</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Visibility</div>
+          <div class="metric-value">
+            {% if weather.visibility is defined %}
+              {{ (weather.visibility / 1000)|round(1) }} km
+            {% else %}
+              —
+            {% endif %}
+          </div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Pressure</div>
+          <div class="metric-value">{{ weather.main.pressure }} hPa</div>
+        </div>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        Search for a city above to see live weather data.
+      </div>
+    {% endif %}
+  </section>
+
+  <!-- 5-Day forecast -->
+  <section class="forecast-card">
+    <div class="forecast-title">5-Day Forecast</div>
+
+    {% if forecast %}
+      <div class="forecast-row">
+        {# take 5 items from forecast list – approx 5 days #}
+        {% for item in forecast.list[:5] %}
+          <div class="forecast-day">
+            <div class="forecast-day-name">
+              {{ item.dt_txt.split(' ')[0] }}
+            </div>
+            <div class="forecast-icon">☁️</div>
+            <div class="forecast-desc">
+              {{ item.weather[0].description|title }}
+            </div>
+            <div class="forecast-temps">
+              {{ item.main.temp_max|round(0) }}° /
+              {{ item.main.temp_min|round(0) }}°
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="forecast-empty">
+        Forecast will appear after you search for a city.
+      </p>
+    {% endif %}
+  </section>
+
+</div>
+
+{% endblock %}
