@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Saved Weather Queries</h2>
+
+{% if queries %}
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Location</th>
+      <th>Start</th>
+      <th>End</th>
+      <th>Created</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for q in queries %}
+    <tr>
+      <td>{{ q.id }}</td>
+      <td>{{ q.normalized_name or q.user_input }}</td>
+      <td>{{ q.start_date or "-" }}</td>
+      <td>{{ q.end_date or "-" }}</td>
+      <td>{{ q.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+      <td>
+        <a href="{{ url_for('detail', query_id=q.id) }}">View</a> |
+        <a href="{{ url_for('edit', query_id=q.id) }}">Edit</a> |
+        <form action="{{ url_for('delete', query_id=q.id) }}" method="POST" style="display:inline;">
+          <button type="submit" onclick="return confirm('Delete this record?');">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No records yet. Go to Home and search for a location.</p>
+{% endif %}
+
+{% endblock %}

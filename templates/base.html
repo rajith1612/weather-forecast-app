@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Inter", sans-serif;
+            background: linear-gradient(180deg, #4facfe, #00f2fe);
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* ===== Top Navigation (New) ===== */
+        .top-nav {
+            width: 100%;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            backdrop-filter: blur(6px);
+        }
+
+        .top-nav a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.9;
+            transition: 0.2s;
+        }
+
+        .top-nav a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        /* Title */
+        .title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 600;
+            margin-top: 30px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px;
+            opacity: 0.7;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 🔵 NEW TOP-RIGHT NAVBAR -->
+    <div class="top-nav">
+        <a href="{{ url_for('history') }}">History</a>
+        <a href="{{ url_for('export', fmt='json') }}">Export JSON</a>
+        <a href="{{ url_for('export', fmt='csv') }}">Export CSV</a>
+        <a href="#">Info</a>
+    </div>
+
+    <!-- Page Title -->
+    <div class="title">Weather App</div>
+
+    <!-- Page Content -->
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        Built by Lakshman Rajith · Tech Assessment Weather App
+    </footer>
+
+</body>
+</html>
